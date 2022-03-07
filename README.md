@@ -34,6 +34,9 @@ describe App_data_danilo;
 # usar o database
 USE App_data_danilo;
 
+# data type cassandra
+https://cassandra.apache.org/doc/latest/cassandra/cql/types.html
+
 # create table
 https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useCreateTable.html
 CREATE TABLE App_data_danilo.clientes ( id UUID PRIMARY KEY, nome text, data_nasc timestamp, nacionalidade text, peso text, altura text );
