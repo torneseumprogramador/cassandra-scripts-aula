@@ -39,7 +39,17 @@ https://cassandra.apache.org/doc/latest/cassandra/cql/types.html
 
 # create table
 https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useCreateTable.html
-CREATE TABLE App_data_danilo.clientes ( id UUID PRIMARY KEY, nome text, data_nasc timestamp, nacionalidade text, peso text, altura text );
+CREATE TABLE App_data_danilo.alunos ( id UUID PRIMARY KEY, nome text, data_nasc timestamp, nacionalidade text, peso float, altura float, idade int);
+
+# insert data
+INSERT INTO App_data_danilo.alunos (id, nome, nacionalidade, data_nasc, peso, altura, idade)
+VALUES (5b6962dd-3f90-4c93-8f61-eabfa4a803e2, 'Danilo','Brasileiro', '1983-09-12 09:00:00', 75.4, 1.75, 28);
+
+# select filter erro
+SELECT * FROM App_data_danilo.alunos where nome = 'Danilo';
+
+# select filter
+SELECT * FROM App_data_danilo.alunos where nome = 'Danilo' ALLOW FILTERING;
 
 # insert data
 INSERT INTO App_data_danilo.clientes (id, nome, nacionalidade) VALUES (5b6962dd-3f90-4c93-8f61-eabfa4a803e2, 'Danilo','Brasileiro');
@@ -118,6 +128,42 @@ INSERT INTO App_data_danilo.rank_by_year_and_name (race_year, race_name, cyclist
 # select 
 cqlsh> SELECT * FROM App_data_danilo.rank_by_year_and_name;
 
+
+# create order by desc ou asc cassandra
+https://www.geeksforgeeks.org/arranging-clustering-column-in-descending-order-in-cassandra/
+# sem ordenar
+CREATE TABLE Emp_track (
+  emp_no int,
+  dept text,
+  name text,
+  PRIMARY KEY (dept, emp_no)
+); 
+insert into Emp_track(emp_no, dept, name) values (101, 'database', 'Ashish'); 
+insert into Emp_track(emp_no, dept, name) values (102, 'database', 'rana'); 
+insert into Emp_track(emp_no, dept, name) values (103, 'database', 'zishan'); 
+insert into Emp_track(emp_no, dept, name) values (104, 'database', 'abi'); 
+insert into Emp_track(emp_no, dept, name) values (105, 'database', 'kartikey');
+select * 
+from Emp_track; 
+
+# ordenando decrescente
+CREATE TABLE Emp_track (
+  emp_no int,
+  dept text,
+  name text,
+  PRIMARY KEY (dept, emp_no)
+)
+WITH CLUSTERING ORDER BY (emp_no asc); 
+
+insert into Emp_track(emp_no, dept, name) values (101, 'database', 'Ashish'); 
+insert into Emp_track(emp_no, dept, name) values (102, 'database', 'rana'); 
+insert into Emp_track(emp_no, dept, name) values (103, 'database', 'zishan'); 
+insert into Emp_track(emp_no, dept, name) values (104, 'database', 'abi'); 
+insert into Emp_track(emp_no, dept, name) values (105, 'database', 'kartikey'); 
+
+select * 
+from Emp_track;
+
 # select com filtro
 cqlsh> SELECT * FROM App_data_danilo.rank_by_year_and_name WHERE cyclist_name = 'Phillippe GILBERT';
 # create select com filtro
@@ -167,3 +213,19 @@ cqlsh> SELECT * FROM cycling.rank_by_year_and_name WHERE race_year=2015;
 cqlsh> CREATE INDEX ryear ON cycling.rank_by_year_and_name (race_year);
 SELECT * FROM cycling.rank_by_year_and_name WHERE race_year=2015;
 
+
+# select like
+
+CREATE TABLE cycling.cyclist_name ( 
+  id UUID PRIMARY KEY, 
+  lastname text, 
+  firstname text
+);
+
+
+CREATE CUSTOM INDEX  fn_prefix ON cyclist_name (firstname)
+USING 'org.apache.cassandra.index.sasi.SASIIndex';
+
+
+SELECT * FROM cyclist_name WHERE firstname LIKE 'M%';
+SELECT * FROM cyclist_name WHERE firstname LIKE 'Mic%';
