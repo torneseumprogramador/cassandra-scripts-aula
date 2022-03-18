@@ -20,6 +20,8 @@ https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useAboutCQL.html
 https://www.geeksforgeeks.org/create-database-in-cassandra/
 
 ### partition key = primary key
+- partição criada organizando itens clusterizados 
+- para criar mais de uma partição em uma tabela utilizar o esquema "primary key((cpf,telefone), nome)" neste caso, cpf e telefone é partition key combinados e nome é cluester key
 ### clustering key = itens na criação da tabela para Ordenação 
 
 
