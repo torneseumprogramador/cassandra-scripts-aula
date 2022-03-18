@@ -19,6 +19,10 @@ https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useAboutCQL.html
 # create database(keyspace) cassandra
 https://www.geeksforgeeks.org/create-database-in-cassandra/
 
+### partition key = primary key
+### clustering key = itens na criação da tabela para Ordenação 
+
+
 # new cassandra create keyspace
 https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useExampleCreatingKeyspace.html
 
