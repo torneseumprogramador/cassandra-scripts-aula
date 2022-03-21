@@ -17,6 +17,7 @@ cqlsh 127.0.0.1 -u cassandra -p cassandra
 https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useAboutCQL.html
 
 # create database(keyspace) cassandra
+describe keyspaces; 
 https://www.geeksforgeeks.org/create-database-in-cassandra/
 
 ### partition key = primary key
