@@ -58,6 +58,11 @@ desc clientes;
 INSERT INTO App_data_danilo.clientes (id, nome, nacionalidade) VALUES (5b6962dd-3f90-4c93-8f61-eabfa4a803e2, 'Danilo','Brasileiro');
 INSERT INTO App_data_danilo.calendar (race_id, race_start_date, race_end_date, race_name) VALUES 
   (201, '2015-02-18', '2015-02-22', $$Women's Tour of New Zealand$$);
+  
+  
+# insert dados temporários TTL (Time to live)
+INSERT INTO clientes (id, nome, nacionalidade) VALUES (5b6962dd-3f90-4c93-8f61-eabfa4a80355, 'Joao','Brasileiro') using ttl 10; # 10 segundos
+select * from clientes; # desaparece o registro em 10 segundos
 
 # exercicio criar atualizar apagar
 # criar tabela
