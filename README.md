@@ -21,6 +21,9 @@ https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useAboutCQL.html
 
 # create database(keyspace) cassandra
 describe keyspaces; 
+### outra forma de ver os keyspaces
+SELECT * from system_schema.keyspaces;
+
 https://www.geeksforgeeks.org/create-database-in-cassandra/
 
 ### partition key = primary key
@@ -84,7 +87,7 @@ select * from clientes; # desaparece o registro em 10 segundos
 
 # exercicio criar atualizar apagar
 # criar tabela
-cqlsh> CREATE TABLE cyclist_expenses ( 
+CREATE TABLE cyclist_expenses ( 
   cyclist_name text, 
   balance float STATIC, 
   expense_id int, 
@@ -95,30 +98,30 @@ cqlsh> CREATE TABLE cyclist_expenses (
 );
 
 # insert
-cqlsh> BEGIN BATCH
+BEGIN BATCH
   INSERT INTO cyclist_expenses (cyclist_name, balance) VALUES ('Vera ADRIAN', 0) IF NOT EXISTS;
   INSERT INTO cyclist_expenses (cyclist_name, expense_id, amount, description, paid) VALUES ('Vera ADRIAN', 1, 7.95, 'Breakfast', false);
   APPLY BATCH;
 
 # update
-cqlsh> UPDATE cyclist_expenses SET balance = -7.95 WHERE cyclist_name = 'Vera ADRIAN' IF balance = 0;
+UPDATE cyclist_expenses SET balance = -7.95 WHERE cyclist_name = 'Vera ADRIAN' IF balance = 0;
 
 # update com transaction
-cqlsh> BEGIN BATCH
+BEGIN BATCH
 INSERT INTO cyclist_expenses (cyclist_name, expense_id, amount, description, paid) VALUES ('Vera ADRIAN', 2, 13.44, 'Lunch', true);
 INSERT INTO cyclist_expenses (cyclist_name, expense_id, amount, description, paid) VALUES ('Vera ADRIAN', 3, 25.00, 'Dinner', false);
 UPDATE cyclist_expenses SET balance = -32.95 WHERE cyclist_name = 'Vera ADRIAN' IF balance = -7.95;
 APPLY BATCH;
 
 # + update
-cqlsh> BEGIN BATCH
+BEGIN BATCH
 UPDATE cyclist_expenses SET balance = 0 WHERE cyclist_name = 'Vera ADRIAN' IF balance = -32.95;
 UPDATE cyclist_expenses SET paid = true WHERE cyclist_name = 'Vera ADRIAN' AND expense_id = 1 IF paid = false;
 UPDATE cyclist_expenses SET paid = true WHERE cyclist_name = 'Vera ADRIAN' AND expense_id = 3 IF paid = false;
 APPLY BATCH;
 
 # + insert
-cqlsh> BEGIN LOGGED BATCH
+BEGIN LOGGED BATCH
 INSERT INTO cyclist_names (cyclist_name, race_id) VALUES ('Vera ADRIAN', 100);
 INSERT INTO cyclist_by_id (race_id, cyclist_name) VALUES (100, 'Vera ADRIAN');
 APPLY BATCH;
@@ -152,7 +155,7 @@ INSERT INTO rank_by_year_and_name (race_year, race_name, cyclist_name, rank)
    VALUES (2014, '4th Tour of Beijing', 'Johan Esteban CHAVES', 3);
 
 # select 
-cqlsh> SELECT * FROM rank_by_year_and_name;
+SELECT * FROM rank_by_year_and_name;
 
 
 # create order by desc ou asc cassandra
@@ -191,33 +194,33 @@ select *
 from Emp_track;
 
 # select com filtro
-cqlsh> SELECT * FROM rank_by_year_and_name WHERE cyclist_name = 'Phillippe GILBERT';
+SELECT * FROM rank_by_year_and_name WHERE cyclist_name = 'Phillippe GILBERT';
 # create select com filtro
-cqlsh> CREATE TABLE cyclist_cat_pts ( category text, points int, id UUID,lastname text, PRIMARY KEY (category, points) ); 
+CREATE TABLE cyclist_cat_pts ( category text, points int, id UUID,lastname text, PRIMARY KEY (category, points) ); 
 INSERT INTO cyclist_cat_pts (category, points, id, lastname) 
    VALUES ('Primaria', 1, 5b6962dd-3f90-4c93-8f61-eabfa4a803e2, 'Santos');
 SELECT * FROM cyclist_cat_pts WHERE category = 'GC' ORDER BY points ASC;
 
 
 # select com campo especídico
-cqlsh> SELECT race_name FROM rank_by_year_and_name;
+SELECT race_name FROM rank_by_year_and_name;
 
 # select com limit
-cqlsh> SELECT race_name FROM rank_by_year_and_name limit 3;
+SELECT race_name FROM rank_by_year_and_name limit 3;
 
 # create select com filtro
-cqlsh> CREATE TABLE cyclist_cat_pts ( category text, points int, id UUID,lastname text, PRIMARY KEY (category, points) ); 
+CREATE TABLE cyclist_cat_pts ( category text, points int, id UUID,lastname text, PRIMARY KEY (category, points) ); 
 INSERT INTO cyclist_cat_pts (category, points, id, lastname) 
    VALUES ('Primaria', 1, 5b6962dd-3f90-4c93-8f61-eabfa4a803e2, 'Santos');
 SELECT * FROM cyclist_cat_pts WHERE category = 'GC' ORDER BY points ASC;
 
 # select renomeando coluna
-cqlsh> SELECT race_name, point_id, lat_long AS CITY_LATITUDE_LONGITUDE FROM cycling.route;
+SELECT race_name, point_id, lat_long AS CITY_LATITUDE_LONGITUDE FROM cycling.route;
 
 # alterando coluna da tabela
-cqlsh> ALTER TABLE cycling.cyclist_alt_stats ADD age int;
+ALTER TABLE cycling.cyclist_alt_stats ADD age int;
 
-cqlsh> ALTER TABLE cycling.cyclist_alt_stats ADD favorite_color varchar;
+ALTER TABLE cycling.cyclist_alt_stats ADD favorite_color varchar;
 ALTER TABLE cycling.cyclist_alt_stats ALTER favorite_color TYPE text;
 
 # qyerys
@@ -243,10 +246,10 @@ select * from rank_by_year_and_name where race_name='4th Tour of Beijing' and ra
 select * from rank_by_year_and_name where rank=1 and race_year=2014;
 
 
-cqlsh> SELECT * FROM cycling.rank_by_year_and_name WHERE race_year=2015;
+SELECT * FROM cycling.rank_by_year_and_name WHERE race_year=2015;
 
 # criando index, outra forma que permite busca entre as colunas sem respeirar a ordem dos primary keys, porem baixa a performance, use com cuidado
-cqlsh> CREATE INDEX ryear ON cycling.rank_by_year_and_name (race_year);
+CREATE INDEX ryear ON cycling.rank_by_year_and_name (race_year);
 SELECT * FROM cycling.rank_by_year_and_name WHERE race_year=2015;
 
 ## exemplo de indice criado que permite uma busca sem a ordem da partition key
@@ -329,3 +332,4 @@ delete from rank_by_year_and_name where race_year = 2014;
 
 ### este não permite apagar pois, precisa filtrar pela partição
 delete from rank_by_year_and_name;
+
