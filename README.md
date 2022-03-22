@@ -17,7 +17,17 @@ cqlsh 127.0.0.1 -u cassandra -p cassandra
 https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useAboutCQL.html
 
 # create database(keyspace) cassandra
+describe keyspaces; 
 https://www.geeksforgeeks.org/create-database-in-cassandra/
+
+### partition key = primary key
+- partição criada organizando itens clusterizados 
+- para criar mais de uma partição em uma tabela utilizar o esquema "primary key((cpf,telefone), nome)" neste caso, cpf e telefone é partition key combinados e nome é cluester key
+### clustering key = itens na criação da tabela para Ordenação 
+
+# A ordenação de uma tabela é sempre feita através de seus partition e cluster keys definidos na criação da tabela
+https://youtu.be/S9rmf4X7E_E
+
 
 # new cassandra create keyspace
 https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useExampleCreatingKeyspace.html
@@ -37,6 +47,9 @@ USE App_data_danilo;
 # data type cassandra
 https://cassandra.apache.org/doc/latest/cassandra/cql/types.html
 
+# show tables, mostrar tabelas
+describe tables;
+
 # create table
 https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useCreateTable.html
 CREATE TABLE App_data_danilo.alunos ( id UUID PRIMARY KEY, nome text, data_nasc timestamp, nacionalidade text, peso float, altura float, idade int);
@@ -51,10 +64,18 @@ SELECT * FROM App_data_danilo.alunos where nome = 'Danilo';
 # select filter
 SELECT * FROM App_data_danilo.alunos where nome = 'Danilo' ALLOW FILTERING;
 
+# descrever tabela
+desc clientes;
+
 # insert data
 INSERT INTO App_data_danilo.clientes (id, nome, nacionalidade) VALUES (5b6962dd-3f90-4c93-8f61-eabfa4a803e2, 'Danilo','Brasileiro');
 INSERT INTO App_data_danilo.calendar (race_id, race_start_date, race_end_date, race_name) VALUES 
   (201, '2015-02-18', '2015-02-22', $$Women's Tour of New Zealand$$);
+  
+  
+# insert dados temporários TTL (Time to live)
+INSERT INTO clientes (id, nome, nacionalidade) VALUES (5b6962dd-3f90-4c93-8f61-eabfa4a80355, 'Joao','Brasileiro') using ttl 10; # 10 segundos
+select * from clientes; # desaparece o registro em 10 segundos
 
 # exercicio criar atualizar apagar
 # criar tabela
