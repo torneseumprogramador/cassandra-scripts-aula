@@ -310,3 +310,22 @@ select * from rank_by_year_and_name;
 ### também e possivel ordenar os dados dentro das partiçoes como decrescnte e crescente
 select * from rank_by_year_and_name where race_year = 2014 order by rank desc;
 select * from rank_by_year_and_name where race_year = 2014 order by rank asc;
+
+# casos que insert também faz update
+### os dois inserts irão deixar somente uma linha
+INSERT INTO rank_by_year_and_name (race_year, race_name, cyclist_name, rank)  VALUES (2014, '4th Tour of Beijing', 'Johan Esteban CHAVES', 3);
+INSERT INTO rank_by_year_and_name (race_year, race_name, cyclist_name, rank)  VALUES (2014, '4th Tour of Beijing', 'Johan Esteban CHAVES', 3);
+select * from rank_by_year_and_name where race_year = 2014;
+### este insert vai fazer update da coluna cyclist_name
+INSERT INTO rank_by_year_and_name (race_year, race_name, cyclist_name, rank)  VALUES (2014, '4th Tour of Beijing', 'Johan Esteban CHAVES 1', 3);
+select * from rank_by_year_and_name where race_year = 2014;
+### este realmente insere uma linha, pois o partition key e cluster key combinam de forma diferente
+INSERT INTO rank_by_year_and_name (race_year, race_name, cyclist_name, rank)  VALUES (2014, '4th Tour of Beijing', 'Johan Esteban CHAVES 4', 4);
+select * from rank_by_year_and_name where race_year = 2014;
+
+# apagar dados
+### este permite apagar pois estao dentro da mesma partição
+delete from rank_by_year_and_name where race_year = 2014; 
+
+### este não permite apagar pois, precisa filtrar pela partição
+delete from rank_by_year_and_name;
