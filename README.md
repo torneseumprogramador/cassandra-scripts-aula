@@ -288,9 +288,17 @@ CREATE TABLE rank_by_year_and_name (
 )
 WITH CLUSTERING ORDER BY (rank asc); 
 
+# update e insert na maioria dos cados são iguais
 
+### este update, insere dados no banco
+UPDATE rank_by_year_and_name set cyclist_name = 'Benjamin PRADES'
+where race_year = 2015 and race_name = 'Tour of Japan - Stage 4 - Minami > Shinshu' and rank = 1;
+select * from rank_by_year_and_name;
+
+### este atualiza o dado feito acima
 INSERT INTO rank_by_year_and_name (race_year, race_name, cyclist_name, rank) 
    VALUES (2015, 'Tour of Japan - Stage 4 - Minami > Shinshu', 'Benjamin PRADES', 1);
+
 INSERT INTO rank_by_year_and_name (race_year, race_name, cyclist_name, rank) 
    VALUES (2015, 'Tour of Japan - Stage 4 - Minami > Shinshu', 'Adam PHELAN', 2);
 INSERT INTO rank_by_year_and_name (race_year, race_name, cyclist_name, rank) 
@@ -333,3 +341,19 @@ delete from rank_by_year_and_name where race_year = 2014;
 ### este não permite apagar pois, precisa filtrar pela partição
 delete from rank_by_year_and_name;
 
+
+# campo counter cassandra, soma mais 1
+CREATE TABLE popular_count (
+  id UUID PRIMARY KEY,
+  popularity counter
+);
+
+### não funciona
+insert int popular_count(id, popularity)values(6ab09bec-e68e-48d9-a5f8-97e6fb4c9b47, 1);
+
+# insere ou atualiza
+UPDATE popular_count SET popularity = popularity + 1 WHERE id = 6ab09bec-e68e-48d9-a5f8-97e6fb4c9b47;
+
+SELECT * FROM popular_count;
+
+drop table popular_count;
