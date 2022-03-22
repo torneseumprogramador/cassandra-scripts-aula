@@ -44,9 +44,15 @@ describe App_data_danilo;
 # usar o database
 USE App_data_danilo;
 
+# show tables, mostrar tabelas
+describe tables;
+
 # create table
 https://docs.datastax.com/en/cql-oss/3.3/cql/cql_using/useCreateTable.html
 CREATE TABLE App_data_danilo.clientes ( id UUID PRIMARY KEY, nome text, data_nasc timestamp, nacionalidade text, peso text, altura text );
+
+# descrever tabela
+desc clitentes;
 
 # insert data
 INSERT INTO App_data_danilo.clientes (id, nome, nacionalidade) VALUES (5b6962dd-3f90-4c93-8f61-eabfa4a803e2, 'Danilo','Brasileiro');
