@@ -1,3 +1,4 @@
+```shell
 # install cassandra MacOs
 https://medium.com/@manishyadavv/how-to-install-cassandra-on-mac-os-d9338fcfcba4
 
@@ -357,3 +358,5 @@ UPDATE popular_count SET popularity = popularity + 1 WHERE id = 6ab09bec-e68e-48
 SELECT * FROM popular_count;
 
 drop table popular_count;
+
+```
